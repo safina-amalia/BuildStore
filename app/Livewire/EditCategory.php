@@ -34,6 +34,11 @@ class EditCategory extends Component
 
     public function render()
     {
+           $current_url = url()->current();
+
+        $explode_url = explode('/',$current_url);
+        // dd($explode_url);
+        $this->currentUrl = $explode_url[3].' '.$explode_url[5];
         return view('livewire.edit-category')->layout('admin-layout');
     }
 }

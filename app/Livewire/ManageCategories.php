@@ -10,7 +10,7 @@ class ManageCategories extends Component
 {
     use WithPagination;
 
-    public $perPage = 5;
+    public $perPage = 10;
     public $sortBy = 'created_at';
     public $sortDir = 'DESC';
     public $search = '';

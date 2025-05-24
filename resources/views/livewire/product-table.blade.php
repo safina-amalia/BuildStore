@@ -148,9 +148,6 @@
                                             </td>
                                             <td class="size-px whitespace-nowrap">
                                                 <div class="px-6 py-1.5">
-                                                    {{-- <a wire:navigate wire:click="delete({{$product->id}})" wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE" class="inline-flex items-center gap-x-1 text-sm text-red-500 decoration-2 hover:underline focus:outline-none focus:underline font-medium" href="">
-                                                        Delete
-                                                    </a> --}}
                                                     <a href="javascript:void(0)"
                                                         wire:click="deleteProduct({{ $product->id }})"
                                                         onclick="confirm('Are you sure you want to delete this product?') || event.stopImmediatePropagation()"

@@ -22,12 +22,12 @@ class ProductTable extends Component
             $this->sortDir = ($this->sortDir == 'ASC') ? 'DESC' : 'ASC';
             return;
         }
-        
+
         $this->sortBy = $sortColum;
         $this->sortDir = 'ASC';
     }
 
-    public function delete($id){
+    public function deleteProduct($id){
         $product = Product::find($id);
 
         $product->delete();
@@ -38,7 +38,7 @@ class ProductTable extends Component
     {
         $current_url = url()->current();
         $explode_url = explode('/',$current_url);
-        
+
         $this->currentUrl = $explode_url[3];
 
         return view('livewire.product-table',[
