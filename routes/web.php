@@ -22,37 +22,42 @@ use App\Livewire\EditCategory;
 
 Route::view('/', 'welcome')->name('/');
 
-// Route::view('dashboard', 'dashboard')
-//     ->middleware(['auth', 'verified'])
-//     ->name('dashboard');
+Route::view('dashboard', 'dashboard')
+->middleware(['auth', 'verified'])
+->name('dashboard');
+
 
 // Route::view('profile', 'profile')
 //     ->middleware(['auth'])
 //     ->name('profile');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+Route::get('/check-algolia', function () {
+    dd(config('scout.algolia.id'));
+});
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
 
 
-Route::get('/product/{product_id}/details',ProductDetails::class);
+Route::get('/product/{product_id}/details', ProductDetails::class);
 
-Route::get('/all/products',AllProducts::class);
+Route::get('/all/products', AllProducts::class);
 
-Route::get('/about',AboutUs::class);
+Route::get('/about', AboutUs::class);
 
-Route::get('/contacts',Contacts::class);
+Route::get('/contacts', Contacts::class);
 
-Route::get('/shopping-cart',ShoppingCartComponent::class)->name('shopping-cart');
+Route::get('/shopping-cart', ShoppingCartComponent::class)->name('shopping-cart');
 
-Route::group(['middleware' => 'admin'], function(){
+Route::group(['middleware' => 'admin'], function () {
     Route::get('/admin/dashboard', AdminDashboard::class)->name('dashboard');
 
     Route::get('/admin/tambah-kurir', TambahKurir::class)->name('admin.tambah-kurir');
 
-    Route::get('/products',ManageProduct::class)->name('products');
+    Route::get('/products', ManageProduct::class)->name('products');
 
-    Route::get('/orders',ManageOrders::class)->name('orders');
+    Route::get('/orders', ManageOrders::class)->name('orders');
 
     Route::get('/add/product', AddProductForm::class);
 
@@ -61,18 +66,17 @@ Route::group(['middleware' => 'admin'], function(){
     Route::get('/add/category', AddCategory::class);
     //editing products
     Route::get('/edit/{id}/product', EditProduct::class);
-     //editing category
+    //editing category
     Route::get('/manage/categories/edit/{id}', EditCategory::class)->name('edit.category');
-
 });
 
-    Route::middleware(['auth', 'kurir'])->group(function () {
+Route::middleware(['auth', 'kurir'])->group(function () {
     Route::get('/kurir/dashboard', KurirDashboard::class);
     Route::get('/kurir/update-pengiriman/{id}', UpdateStatusPengiriman::class);
 });
 
-    Route::middleware(['auth', 'user'])->group(function () {
+Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/pembayaran/{id}', PembayaranForm::class);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

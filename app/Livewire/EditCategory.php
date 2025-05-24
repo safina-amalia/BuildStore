@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Livewire;
 
 use Livewire\Component;
@@ -7,17 +6,18 @@ use App\Models\Category;
 
 class EditCategory extends Component
 {
-    public $name;
-    public $currentUrl;
+    public $name;         // Public property for category name
+    public $category_id;  // Public property for category ID
+    public $currentUrl;   // Public property for current URL
 
     public function mount($id)
     {
-        $this->category_id = $id;
-        $category = Category::findOrFail($id);
-        $this->name = $category->name;
-
-        $this->currentUrl = 'manage/categories/edit/' . $id;
+        $this->category_id = $id;  // Set category ID from the route or parameter
+        $category = Category::findOrFail($id);  // Retrieve the category
+        $this->name = $category->name;  // Populate the name property
+        $this->currentUrl = 'manage/categories/edit/' . $id;  // Set the current URL
     }
+
     public function updateCategory()
     {
         $this->validate([
@@ -28,13 +28,12 @@ class EditCategory extends Component
         $category->name = $this->name;
         $category->save();
 
-        // session()->flash('message', 'Category updated successfully!');
-        // return redirect()->route('kategori.index');
+        session()->flash('message', 'Category updated successfully!');
         return $this->redirect('/manage/categories', navigate: true);
     }
 
     public function render()
     {
-       return view('livewire.edit-category')->layout('admin-layout');
+        return view('livewire.edit-category')->layout('admin-layout');
     }
 }
