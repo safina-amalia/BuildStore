@@ -22,7 +22,7 @@ class LoginForm extends Form
     public bool $remember = false;
 
     /**
-     * Attempt to authenticate the request's credentials.
+     * Mencoba untuk mengautentikasi kredensial yang diberikan.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -42,7 +42,9 @@ class LoginForm extends Form
     }
 
     /**
-     * Ensure the authentication request is not rate limited.
+     * Memastikan bahwa permintaan autentikasi tidak melebihi batas rate limit.
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     protected function ensureIsNotRateLimited(): void
     {
@@ -63,10 +65,10 @@ class LoginForm extends Form
     }
 
     /**
-     * Get the authentication rate limiting throttle key.
+     * Mendapatkan kunci throttle berdasarkan email dan alamat IP.
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }

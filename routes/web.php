@@ -17,15 +17,15 @@ use App\Livewire\Admin\TambahKurir;
 use App\Livewire\UpdateStatusPengiriman;
 use App\Livewire\PembayaranForm;
 use App\Livewire\ShoppingCartComponent;
-use App\Livewire\EditCategory;
+use App\Livewire\EditCategoryNew;
+use App\Livewire\Auth\Register;
 
 
 Route::view('/', 'welcome')->name('/');
 
-Route::view('dashboard', 'dashboard')
-->middleware(['auth', 'verified'])
-->name('dashboard');
-
+// Route::view('dashboard', 'dashboard')
+// ->middleware(['auth', 'verified'])
+// ->name('dashboard');
 
 // Route::view('profile', 'profile')
 //     ->middleware(['auth'])
@@ -39,9 +39,9 @@ Route::get('/check-algolia', function () {
 //     return view('dashboard');
 // })->name('dashboard');
 
-
-Route::get('/product/{product_id}/details', ProductDetails::class);
-
+Route::middleware('guest')->group(function () {
+    Route::get('/register', Register::class)->name('register');
+});
 Route::get('/all/products', AllProducts::class);
 
 Route::get('/about', AboutUs::class);
@@ -50,8 +50,9 @@ Route::get('/contacts', Contacts::class);
 
 Route::get('/shopping-cart', ShoppingCartComponent::class)->name('shopping-cart');
 
-Route::group(['middleware' => 'admin'], function () {
-    Route::get('/admin/dashboard', AdminDashboard::class)->name('dashboard');
+// Group middleware untuk admin (role = 1)
+Route::group(['middleware' => ['auth', 'admin']], function () {
+    Route::get('/admin/dashboard', AdminDashboard::class)->name('admin.dashboard');
 
     Route::get('/admin/tambah-kurir', TambahKurir::class)->name('admin.tambah-kurir');
 
@@ -62,21 +63,26 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/add/product', AddProductForm::class);
 
     Route::get('/manage/categories', ManageCategories::class);
-    //adding category form
+
+    // adding category form
     Route::get('/add/category', AddCategory::class);
-    //editing products
+
+    // editing products
     Route::get('/edit/{id}/product', EditProduct::class);
-    //editing category
-    Route::get('/manage/categories/edit/{id}', EditCategory::class)->name('edit.category');
+
+    // editing category
+    Route::get('/manage/categories/edit/{id}', EditCategoryNew::class)->name('edit.category');
 });
 
+// Group middleware untuk kurir (role = 2)
 Route::middleware(['auth', 'kurir'])->group(function () {
-    Route::get('/kurir/dashboard', KurirDashboard::class);
+    Route::get('/kurir/dashboard', KurirDashboard::class)->name('kurir.dashboard');
     Route::get('/kurir/update-pengiriman/{id}', UpdateStatusPengiriman::class);
 });
 
+// Group middleware untuk user/customer (role = 0)
 Route::middleware(['auth', 'user'])->group(function () {
-    Route::get('/pembayaran/{id}', PembayaranForm::class);
+    Route::get('/pembayaran/{id}', PembayaranForm::class)->name('pembayaran.form');
 });
 
 require __DIR__ . '/auth.php';

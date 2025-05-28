@@ -47,7 +47,7 @@ return [
 
         'kurir' => [
             'driver'   => 'session',
-            'provider' => 'couriers',
+            'provider' => 'kurirs',
         ],
     ],
 

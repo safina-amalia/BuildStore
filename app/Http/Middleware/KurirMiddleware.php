@@ -15,7 +15,7 @@ class KurirMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->role === '0') {
+        if (auth()->check() && auth()->user()->role === 2) {
         return $next($request);
     }
     return redirect('/login')->with('error', 'Akses ditolak!');
