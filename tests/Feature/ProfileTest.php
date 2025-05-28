@@ -11,9 +11,9 @@ class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_profile_page_is_displayed(): void
+    public function test_profile_page_is_displayed_for_admin(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $response = $this->actingAs($user)->get('/profile');
 
@@ -21,12 +21,41 @@ class ProfileTest extends TestCase
             ->assertOk()
             ->assertSeeVolt('profile.update-profile-information-form')
             ->assertSeeVolt('profile.update-password-form')
-            ->assertSeeVolt('profile.delete-user-form');
+            ->assertSeeVolt('profile.delete-user-form')
+            ->assertSee('Admin Panel');
+    }
+
+    public function test_profile_page_is_displayed_for_customer(): void
+    {
+        $user = User::factory()->create(['role' => 'customer']);
+
+        $response = $this->actingAs($user)->get('/profile');
+
+        $response
+            ->assertOk()
+            ->assertSeeVolt('profile.update-profile-information-form')
+            ->assertSeeVolt('profile.update-password-form')
+            ->assertSeeVolt('profile.delete-user-form')
+            ->assertSee('Profil Pelanggan');
+    }
+
+    public function test_profile_page_is_displayed_for_kurir(): void
+    {
+        $user = User::factory()->create(['role' => 'kurir']);
+
+        $response = $this->actingAs($user)->get('/profile');
+
+        $response
+            ->assertOk()
+            ->assertSeeVolt('profile.update-profile-information-form')
+            ->assertSeeVolt('profile.update-password-form')
+            ->assertSeeVolt('profile.delete-user-form')
+            ->assertSee('Dashboard Kurir');
     }
 
     public function test_profile_information_can_be_updated(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $this->actingAs($user);
 
@@ -48,7 +77,7 @@ class ProfileTest extends TestCase
 
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $this->actingAs($user);
 
@@ -66,7 +95,7 @@ class ProfileTest extends TestCase
 
     public function test_user_can_delete_their_account(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $this->actingAs($user);
 
@@ -84,7 +113,7 @@ class ProfileTest extends TestCase
 
     public function test_correct_password_must_be_provided_to_delete_account(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $this->actingAs($user);
 

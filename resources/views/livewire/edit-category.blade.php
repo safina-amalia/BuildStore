@@ -20,9 +20,9 @@
 
                     <div class="sm:col-span-9">
                         <div>
-                            <input type="text" wire:model="name" id="edit-category-name"
+                            <input type="text" wire:model="category_name" id="edit-category-name"
                                 class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
-                            @error('name')
+                            @error('category_name')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>

@@ -10,9 +10,12 @@ class AddCategory extends Component
     public $currentUrl;
     public $category_name = '';
 
-    public function save(){
+    public function save()
+    {
         $this->validate([
-            'category_name' => 'required'
+            'category_name' => 'required|unique:categories,name',
+        ], [
+            'category_name.unique' => 'Nama kategori sudah digunakan.',
         ]);
 
         $category = new Category();
@@ -21,12 +24,13 @@ class AddCategory extends Component
 
         return $this->redirect('/manage/categories', navigate: true);
     }
+
     public function render()
     {
         $current_url = url()->current();
-        $explode_url = explode('/',$current_url);
-        
-        $this->currentUrl = $explode_url[3].' '.$explode_url[4];
+        $explode_url = explode('/', $current_url);
+
+        $this->currentUrl = $explode_url[3] . ' ' . ($explode_url[4] ?? '');
         return view('livewire.add-category')->layout('admin-layout');
     }
 }

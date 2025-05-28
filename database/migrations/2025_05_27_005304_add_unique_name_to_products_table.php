@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->integer('role'); //0 - users/ customer & 1 for our admin,2 kurir
+        Schema::table('products', function (Blueprint $table) {
+            $table->unique('name');
         });
     }
-// ->default(0)
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropUnique(['name']);
         });
     }
 };

@@ -15,8 +15,8 @@ class Customer extends Model
     protected $fillable = [
         'user_id',
         'nama',
-        'email',
-        'password',
+        // 'email',
+        // 'password',
         'alamat',
         'no_tlp'
     ];

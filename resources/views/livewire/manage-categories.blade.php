@@ -1,10 +1,10 @@
-@if (session()->has('message'))
-    <div class="p-3 mb-3 bg-green-100 text-green-800 rounded">
-        {{ session('message') }}
-    </div>
-@endif
 <!-- Table Section -->
 <div>
+    @if (session()->has('message'))
+        <div class="p-3 mb-3 bg-green-100 text-green-800 rounded">
+            {{ session('message') }}
+        </div>
+    @endif
     <livewire:bread-crumb :url="$currentUrl" />
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         <!-- Card -->
@@ -53,7 +53,7 @@
 
                                     @include('livewire.theaders.th', [
                                         'name' => 'name',
-                                        'columnName' => 'category Name',
+                                        'columnName' => 'Category Name',
                                     ])
 
                                     @include('livewire.theaders.th', [
@@ -83,16 +83,16 @@
                                                     <span
                                                         class="text-sm text-gray-500">{{ date('D M Y, H:i', strtotime($category->created_at)) }}</span>
                                                     <!-- <span class="text-sm text-gray-500">
-                      {{ $category->created_at ? $category->created_at->format('D, d M Y H:i') : '-' }}
-                  </span> -->
+                                                            {{ $category->created_at ? $category->created_at->format('D, d M Y H:i') : '-' }}
+                                                        </span> -->
 
                                                 </div>
                                             </td>
                                             <td class="size-px whitespace-nowrap">
                                                 <div class="px-6 py-1.5">
                                                     <!-- <a class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium" href="#">
-                  Edit
-                </a> -->
+                                                    Edit
+                                                    </a> -->
                                                     <a class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium"
                                                         href="{{ route('edit.category', ['id' => $category->id]) }}">
                                                         Edit
