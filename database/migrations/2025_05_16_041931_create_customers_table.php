@@ -15,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('nama');
+            // $table->string('email'); // kolom email ditambahkan
             $table->string('alamat');
             $table->string('no_tlp');
             $table->timestamps();
-        });
 
+            // Jika kamu mau email unik di tabel customers, aktifkan baris ini:
+            $table->unique('email');
+        });
     }
 
     /**

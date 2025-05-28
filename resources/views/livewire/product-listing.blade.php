@@ -13,4 +13,15 @@
         @endif
         
     </div>
+    @foreach($products as $product)
+    <div class="product-card">
+        <h3>{{ $product->name }}</h3>
+        <p>{{ $product->price }}</p>
+
+        <button wire:click="$emit('addToCart', {{ $product->id }})" class="btn btn-primary">
+            Tambah ke Keranjang
+        </button>
+    </div>
+    @endforeach
+
 </div>

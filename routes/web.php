@@ -18,16 +18,30 @@ use App\Livewire\UpdateStatusPengiriman;
 use App\Livewire\PembayaranForm;
 use App\Livewire\ShoppingCartComponent;
 use App\Livewire\EditCategoryNew;
+<<<<<<< HEAD
+=======
+use App\Livewire\Auth\Register;
+
+>>>>>>> 423fe2a09e74310352221c0c481cb2111a1b057f
 
 Route::view('/', 'welcome')->name('/');
 
 // Route::view('dashboard', 'dashboard')
+<<<<<<< HEAD
 //     ->middleware(['auth', 'verified'])
 //     ->name('dashboard');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+=======
+// ->middleware(['auth', 'verified'])
+// ->name('dashboard');
+
+// Route::view('profile', 'profile')
+//     ->middleware(['auth'])
+//     ->name('profile');
+>>>>>>> 423fe2a09e74310352221c0c481cb2111a1b057f
 
 Route::get('/check-algolia', function () {
     dd(config('scout.algolia.id'));
@@ -37,16 +51,28 @@ Route::get('/check-algolia', function () {
 //     return view('dashboard');
 // })->name('dashboard');
 
+<<<<<<< HEAD
 Route::get('/product/{product_id}/details', ProductDetails::class);
+=======
+Route::middleware('guest')->group(function () {
+    Route::get('/register', Register::class)->name('register');
+});
+>>>>>>> 423fe2a09e74310352221c0c481cb2111a1b057f
 Route::get('/all/products', AllProducts::class);
 Route::get('/about', AboutUs::class);
 Route::get('/contacts', Contacts::class);
 Route::get('/shopping-cart', ShoppingCartComponent::class)->name('shopping-cart');
 
+<<<<<<< HEAD
 // untuk halaman profile
 // Route::middleware(['auth'])->get('/profile', function () {
 //     return view('profile');
 // })->name('profile.show');
+=======
+// Group middleware untuk admin (role = 1)
+Route::group(['middleware' => ['auth', 'admin']], function () {
+    Route::get('/admin/dashboard', AdminDashboard::class)->name('admin.dashboard');
+>>>>>>> 423fe2a09e74310352221c0c481cb2111a1b057f
 
 
 // Group middleware untuk admin (role = 1)
@@ -57,8 +83,19 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/orders', ManageOrders::class)->name('orders');
     Route::get('/add/product', AddProductForm::class);
     Route::get('/manage/categories', ManageCategories::class);
+<<<<<<< HEAD
     Route::get('/add/category', AddCategory::class);
     Route::get('/edit/{id}/product', EditProduct::class);
+=======
+
+    // adding category form
+    Route::get('/add/category', AddCategory::class);
+
+    // editing products
+    Route::get('/edit/{id}/product', EditProduct::class);
+
+    // editing category
+>>>>>>> 423fe2a09e74310352221c0c481cb2111a1b057f
     Route::get('/manage/categories/edit/{id}', EditCategoryNew::class)->name('edit.category');
 });
 

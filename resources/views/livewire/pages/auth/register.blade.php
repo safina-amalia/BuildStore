@@ -1,110 +1,56 @@
-<?php
-
-use App\Models\Customer; // Assuming you have a Customer model
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Livewire\Attributes\Layout;
-use Livewire\Volt\Component;
-
-new #[Layout('layouts.guest')] class extends Component
-{
-    public string $nama = '';
-    public string $email = '';
-    public string $password = '';
-    public string $password_confirmation = '';
-    public string $alamat = '';
-    public string $no_tlp = '';
-
-    /**
-     * Handle an incoming registration request.
-     */
-    public function register(): void
-    {
-        $validated = $this->validate([
-            'nama' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:customers'], // Change here to match customers
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-            'alamat' => ['required', 'string', 'max:255'],
-            'no_tlp' => ['required', 'string', 'max:15'], // You can adjust the rules based on your needs
-        ]);
-
-        $validated['password'] = Hash::make($validated['password']);
-
-        // Create the customer record in the database
-        $customer = Customer::create($validated);
-
-        // Fire the Registered event
-        event(new Registered($customer));
-
-        Auth::login($customer); // Assuming the login method can also handle Customer
-
-        // Redirect based on the user role or other criteria as necessary
-        if (auth()->user()->role == 1) {
-            $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
-        } else {
-            $this->redirectIntended(route('/', absolute: false), navigate: true);
-        }
-    }
-}; ?>
-
-<div>
+<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
     <form wire:submit.prevent="register">
-        <!-- Name -->
-        <div>
-            <x-input-label for="nama" :value="__('Name')" />
-            <x-text-input wire:model="nama" id="nama" class="block mt-1 w-full" type="text" name="nama" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('nama')" class="mt-2" />
+        <!-- Nama -->
+        <div class="mb-4">
+            <label for="nama" class="block text-gray-700 font-semibold mb-1">Nama</label>
+            <input wire:model="nama" id="nama" type="text" required autofocus
+                class="w-full px-3 py-2 border rounded @error('nama') border-red-500 @enderror" />
+            @error('nama') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Alamat -->
-        <div class="mt-4">
-            <x-input-label for="alamat" :value="__('Address')" />
-            <x-text-input wire:model="alamat" id="alamat" class="block mt-1 w-full" type="text" name="alamat" required />
-            <x-input-error :messages="$errors->get('alamat')" class="mt-2" />
-        </div>
-
-        <!-- No. Tlp -->
-        <div class="mt-4">
-            <x-input-label for="no_tlp" :value="__('Phone Number')" />
-            <x-text-input wire:model="no_tlp" id="no_tlp" class="block mt-1 w-full" type="text" name="no_tlp" required />
-            <x-input-error :messages="$errors->get('no_tlp')" class="mt-2" />
+        <!-- Email -->
+        <div class="mb-4">
+            <label for="email" class="block text-gray-700 font-semibold mb-1">Email</label>
+            <input wire:model="email" id="email" type="email" required
+                class="w-full px-3 py-2 border rounded @error('email') border-red-500 @enderror" />
+            @error('email') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="mb-4">
+            <label for="password" class="block text-gray-700 font-semibold mb-1">Password</label>
+            <input wire:model="password" id="password" type="password" required autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded @error('password') border-red-500 @enderror" />
+            @error('password') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        <!-- Password Confirmation -->
+        <div class="mb-4">
+            <label for="password_confirmation" class="block text-gray-700 font-semibold mb-1">Konfirmasi Password</label>
+            <input wire:model="password_confirmation" id="password_confirmation" type="password" required autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded @error('password_confirmation') border-red-500 @enderror" />
+            @error('password_confirmation') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}" wire:navigate>
-                {{ __('Already registered?') }}
-            </a>
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+        <!-- Alamat -->
+        <div class="mb-4">
+            <label for="alamat" class="block text-gray-700 font-semibold mb-1">Alamat</label>
+            <input wire:model="alamat" id="alamat" type="text" required
+                class="w-full px-3 py-2 border rounded @error('alamat') border-red-500 @enderror" />
+            @error('alamat') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
+
+        <!-- No Telepon -->
+        <div class="mb-6">
+            <label for="no_tlp" class="block text-gray-700 font-semibold mb-1">No Telepon</label>
+            <input wire:model="no_tlp" id="no_tlp" type="text" required
+                class="w-full px-3 py-2 border rounded @error('no_tlp') border-red-500 @enderror" />
+            @error('no_tlp') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded">
+            Register
+        </button>
     </form>
 </div>

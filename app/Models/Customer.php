@@ -4,36 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
 
 class Customer extends Model
 {
-    use HasFactory, Searchable;
-
-    // protected $primaryKey = 'id_customer';
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
         'nama',
+<<<<<<< HEAD
         // 'email',
         // 'password',
+=======
+        'email',
+        'password',
+        'email_verified_at',
+>>>>>>> 423fe2a09e74310352221c0c481cb2111a1b057f
         'alamat',
-        'no_tlp'
+        'no_tlp',
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
-
-    public function pesanan() {
-        return $this->hasMany(Pesanan::class, 'customer_id');
-    }
-
-    public function pembayaran() {
-        return $this->hasMany(Pembayaran::class, 'customer_id');
-    }
-
-    public function pengiriman() {
-        return $this->hasMany(Pengiriman::class, 'customer_id');
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }
