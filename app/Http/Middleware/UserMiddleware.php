@@ -15,7 +15,7 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user() && auth()->user()->role == 0) {
+        if (auth()->user() && auth()->user()->role == 3) {
             return $next($request);
         }
         return redirect('/login');

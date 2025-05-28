@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('role')->default(0); //0 - users/ customer & 1 for our admin
+            $table->integer('role'); //0 - users/ customer & 1 for our admin,2 kurir
         });
     }
-
+// ->default(0)
     /**
      * Reverse the migrations.
      */

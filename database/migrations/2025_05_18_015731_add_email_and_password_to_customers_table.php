@@ -8,26 +8,31 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('customers', function (Blueprint $table) {
-            // Menambahkan kolom email
-            if (!Schema::hasColumn('customers', 'email')) {
-                $table->string('email')->unique()->after('nama'); // Setelah kolom 'nama'
-            }
-            // Menambahkan kolom password
-            if (!Schema::hasColumn('customers', 'password')) {
-                $table->string('password')->after('email'); // Setelah kolom 'email'
-            }
-            // Menambahkan kolom verifikasi email (jika diperlukan)
-            if (!Schema::hasColumn('customers', 'email_verified_at')) {
-                $table->timestamp('email_verified_at')->nullable()->after('password'); // Setelah kolom 'password'
-            }
-        });
+        // Cek dan tambahkan kolom email jika belum ada
+        if (!Schema::hasColumn('customers', 'email')) {
+            Schema::table('customers', function (Blueprint $table) {
+                $table->string('email')->unique()->nullable()->after('nama'); // nullable dulu agar tidak error pada data lama
+            });
+        }
+
+        // Cek dan tambahkan kolom password jika belum ada
+        if (!Schema::hasColumn('customers', 'password')) {
+            Schema::table('customers', function (Blueprint $table) {
+                $table->string('password')->nullable()->after('email'); // nullable dulu
+            });
+        }
+
+        // Cek dan tambahkan kolom email_verified_at jika belum ada
+        if (!Schema::hasColumn('customers', 'email_verified_at')) {
+            Schema::table('customers', function (Blueprint $table) {
+                $table->timestamp('email_verified_at')->nullable()->after('password');
+            });
+        }
     }
 
     public function down(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            // Menghapus kolom yang ditambahkan
             $table->dropColumn(['email', 'password', 'email_verified_at']);
         });
     }
