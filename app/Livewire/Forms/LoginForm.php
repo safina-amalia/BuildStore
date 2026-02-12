@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -21,16 +22,23 @@ class LoginForm extends Form
     #[Validate('boolean')]
     public bool $remember = false;
 
-    /**
-     * Mencoba untuk mengautentikasi kredensial yang diberikan.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only(['email', 'password']), $this->remember)) {
+        $credentials = $this->only(['email', 'password']);
+
+        // Cek apakah user dengan email tsb ada
+        $user = User::where('email', $this->email)->first();
+
+        if (! $user) {
+            throw ValidationException::withMessages([
+                'form.email' => 'Email tidak ditemukan dalam sistem.',
+            ]);
+        }
+
+        // Autentikasi dengan default guard 'web'
+        if (!Auth::attempt($credentials, $this->remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -39,16 +47,14 @@ class LoginForm extends Form
         }
 
         RateLimiter::clear($this->throttleKey());
+
+        // Paksa Laravel menggunakan guard 'web' untuk session user
+        Auth::shouldUse('web');
     }
 
-    /**
-     * Memastikan bahwa permintaan autentikasi tidak melebihi batas rate limit.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     protected function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -64,9 +70,6 @@ class LoginForm extends Form
         ]);
     }
 
-    /**
-     * Mendapatkan kunci throttle berdasarkan email dan alamat IP.
-     */
     protected function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());

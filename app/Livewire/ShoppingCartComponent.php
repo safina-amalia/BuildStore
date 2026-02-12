@@ -9,20 +9,28 @@ use Illuminate\Support\Facades\Auth;
 class ShoppingCartComponent extends Component
 {
     public $cartItems = [];
-    public $subtotal;
-    public $shippingCost;
-    public $total;
-
+    public $subtotal = 0;
+    public $shippingCost = 0;
+    public $total = 0;
     public $distance = 0;
     public $shippingRatePerKm = 5000;
 
-    protected $listeners = [
-        'cartUpdated' => 'render',
-    ];
-
     public function mount()
     {
-        $this->cartItems = $this->getCartItems();
+        $this->loadCart();
+    }
+
+    public function loadCart()
+    {
+        $this->cartItems = ShoppingCart::with('product')
+            ->where('user_id', Auth::id())
+            ->get();
+
+        $this->calculateTotals();
+    }
+
+    public function updatedDistance()
+    {
         $this->calculateTotals();
     }
 
@@ -36,59 +44,31 @@ class ShoppingCartComponent extends Component
         $this->total = $this->subtotal + $this->shippingCost;
     }
 
-    public function getCartItems()
-    {
-        return ShoppingCart::with('product')
-            ->where('user_id', Auth::id())
-            ->get();
-    }
-
-    public function addToCart($productId)
-    {
-        $cartItem = ShoppingCart::where('user_id', Auth::id())
-            ->where('product_id', $productId)
-            ->first();
-
-        if ($cartItem) {
-            $cartItem->quantity += 1;
-            $cartItem->save();
-        } else {
-            ShoppingCart::create([
-                'user_id' => Auth::id(),
-                'product_id' => $productId,
-                'quantity' => 1,
-            ]);
-        }
-
-        $this->dispatch('cartUpdated');
-    }
-
     public function updateQuantity($cartItemId, $quantity)
     {
-        $cartItem = ShoppingCart::find($cartItemId);
+        if ($quantity < 1) return;
+
+        $cartItem = ShoppingCart::where('user_id', Auth::id())
+            ->find($cartItemId);
+
         if ($cartItem) {
             $cartItem->quantity = $quantity;
             $cartItem->save();
-            $this->dispatch('cartUpdated');
+            $this->loadCart();
         }
     }
 
     public function removeItem($cartItemId)
     {
-        $cartItem = ShoppingCart::find($cartItemId);
-        if ($cartItem) {
-            $cartItem->delete();
-            $this->dispatch('cartUpdated');
-        }
+        ShoppingCart::where('user_id', Auth::id())
+            ->where('id', $cartItemId)
+            ->delete();
+
+        $this->loadCart();
     }
 
     public function render()
     {
-        $this->cartItems = $this->getCartItems();
-        $this->calculateTotals();
-
-        return view('livewire.shopping-cart-component', [
-            'cartItems' => $this->cartItems,
-        ])->title('E-commerce | Shopping cart');
+        return view('livewire.shopping-cart-component')->title('E-commerce | Shopping Cart');
     }
 }

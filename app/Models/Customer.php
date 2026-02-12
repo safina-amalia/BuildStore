@@ -3,23 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+// use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Customer extends Authenticatable
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
         'nama',
-<<<<<<< HEAD
-        // 'email',
-        // 'password',
-=======
         'email',
         'password',
         'email_verified_at',
->>>>>>> 423fe2a09e74310352221c0c481cb2111a1b057f
         'alamat',
         'no_tlp',
     ];

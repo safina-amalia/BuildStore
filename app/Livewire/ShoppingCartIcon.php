@@ -24,6 +24,7 @@ class ShoppingCartIcon extends Component
     }
     public function render()
     {
-        return view('livewire.shopping-cart-icon');
+    return view('livewire.shopping-cart-icon')
+        ->with('showCart', Auth::check() && Auth::user()->role == 3);
     }
 }

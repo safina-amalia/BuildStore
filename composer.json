@@ -13,7 +13,8 @@
         "laravel/scout": "^10.15",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "*",
-        "livewire/volt": "^1.0"
+        "livewire/volt": "^1.0",
+        "midtrans/midtrans-php": "^2.6"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Livewire\Livewire;
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Midtrans\Config;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Livewire::component('edit-category', EditCategory::class);
+        // Konfigurasi Midtrans
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY', 'SB-Mid-server-QRKR4DNSHoisPCnqjTOO72SB'); // Gunakan env
+        Config::$isProduction = false; // Ubah ke true di production
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        // Cegah redirect jika user login ke halaman /
+        Route::matched(function () {
+            if (request()->is('/') && Auth::check()) {
+                // Tidak melakukan redirect — biarkan user tetap di halaman welcome
+            }
+        });
     }
 }

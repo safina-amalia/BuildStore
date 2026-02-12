@@ -9,19 +9,20 @@ class Pembayaran extends Model
 {
     use HasFactory;
 
-    // protected $primaryKey = 'id_pembayaran';
-
     protected $fillable = [
-        'customer_id',
         'pesanan_id',
-        'metode'
+        'metode',
+        'status',
+        'midtrans_response'
     ];
 
-    public function customer() {
-        return $this->belongsTo(Customer::class, 'customer_id');
-    }
+    protected $casts = [
+        'midtrans_response' => 'array',
+    ];
 
-    public function pesanan() {
+    // Relasi ke pesanan
+    public function pesanan()
+    {
         return $this->belongsTo(Pesanan::class, 'pesanan_id');
     }
 }

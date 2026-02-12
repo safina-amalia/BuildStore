@@ -2,15 +2,9 @@
 
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
-// use App\Livewire\Auth\Register; 
 use Livewire\Volt\Volt;
 
 Route::middleware('guest')->group(function () {
-    //     Volt::route('register', 'pages.auth.register')
-    //         ->name('register');
-
-    // Volt::route('login', 'pages.auth.login')->name('login');
-
     Volt::route('login', 'pages.auth.login')
         ->name('login');
 
@@ -19,7 +13,7 @@ Route::middleware('guest')->group(function () {
 
     Volt::route('reset-password/{token}', 'pages.auth.reset-password')
         ->name('password.reset');
-}); // ✅ Ini penutup blok middleware('guest')
+}); // Ini penutup blok middleware('guest')
 
 // Routes untuk user yang sudah login
 Route::middleware('auth')->group(function () {

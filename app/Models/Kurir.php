@@ -4,25 +4,35 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
+use Illuminate\Support\Facades\Hash;
 
 class Kurir extends Model
 {
-    use HasFactory, Searchable;
-
-    // protected $primaryKey = 'id_kurir';
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
         'nama',
-        'no_tlp'
+        'email',
+        'password',
+        'no_tlp',
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class, 'user_id');
+    // Jika kamu ingin hash password secara otomatis saat diset
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
     }
 
-    public function pengiriman() {
+    // Relasi ke User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // Misalnya relasi ke pengiriman
+    public function pengiriman()
+    {
         return $this->hasMany(Pengiriman::class, 'kurir_id');
     }
 }

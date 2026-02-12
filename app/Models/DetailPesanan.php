@@ -4,27 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
 
 class DetailPesanan extends Model
 {
-    use HasFactory, Searchable;
-
-    // protected $primaryKey = 'id_detailPesanan';
+    use HasFactory;
 
     protected $fillable = [
         'pesanan_id',
         'product_id',
-        'jumlah',
+        'qty',
         'harga_satuan',
         'subtotal'
     ];
 
-    public function produk() {
+    // Relasi ke produk
+    public function produk()
+    {
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function pesanan() {
+    // Relasi ke pesanan
+    public function pesanan()
+    {
         return $this->belongsTo(Pesanan::class, 'pesanan_id');
     }
 }

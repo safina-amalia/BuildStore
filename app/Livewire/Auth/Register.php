@@ -52,7 +52,7 @@ class Register extends Component
         event(new Registered($user));
         Auth::login($user);
 
-        $this->redirectIntended(route('/'));
+        $this->redirectIntended(route('user.dashboard'));
     }
 
     public function render()

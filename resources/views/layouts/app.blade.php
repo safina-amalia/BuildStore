@@ -17,11 +17,8 @@
     @livewireStyles
 </head>
 
-<<<<<<< HEAD
 <body class="font-sans antialiased" x-data>
-=======
 <body class="font-sans antialiased">
->>>>>>> 423fe2a09e74310352221c0c481cb2111a1b057f
     <div class="min-h-screen bg-gray-100">
         <livewire:layout.navigation />
 
@@ -40,12 +37,12 @@
         </main>
     </div>
     @livewireScripts
-<<<<<<< HEAD
 
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tambahkan sebelum </body> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-=======
->>>>>>> 423fe2a09e74310352221c0c481cb2111a1b057f
+
 </body>
 
 </html>

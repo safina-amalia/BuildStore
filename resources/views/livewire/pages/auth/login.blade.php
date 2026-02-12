@@ -13,15 +13,14 @@ new #[Layout('layouts.guest')] class extends Component {
      */
     public function login(): void
     {
-        $this->validate(); // Validasi form LoginForm.php
+        $this->validate();
 
-        $this->form->authenticate(); // Jalankan proses autentikasi dari form
+        $this->form->authenticate();
 
-        Session::regenerate(); // Hindari session fixation
+        Session::regenerate();
 
-        $user = auth()->user(); // Ambil user yang berhasil login
+        $user = auth()->user();
 
-        // Jika user tidak memiliki role, logout dan kembalikan ke halaman utama
         if (!$user || !$user->role) {
             auth()->logout();
             Session::invalidate();
@@ -30,16 +29,19 @@ new #[Layout('layouts.guest')] class extends Component {
             return;
         }
 
-        // Arahkan user ke dashboard sesuai rolenya
+        // Hapus url.intended jika ada
+        session()->forget('url.intended');
+
+        // Arahkan user sesuai rolenya
         switch ($user->role) {
             case 1:
-                $this->redirectIntended(route('admin.dashboard'));
+                $this->redirect(route('admin.dashboard'));
                 break;
             case 2:
-                $this->redirectIntended(route('kurir.dashboard'));
+                $this->redirect(route('kurir.dashboard'));
                 break;
             case 3:
-                $this->redirectIntended(route('user.dashboard'));
+                $this->redirect(route('welcome'));
                 break;
             default:
                 auth()->logout();

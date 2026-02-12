@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "alpinejs": "^3.14.9",
-        "preline": "^2.4.0"
+        "preline": "^2.4.0",
+        "sweetalert2": "^11.22.0"
     }
 }

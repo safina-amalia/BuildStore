@@ -4,38 +4,48 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
 
 class Pesanan extends Model
 {
-    use HasFactory, Searchable;
-
-    // protected $primaryKey = 'id_pesanan';
+    use HasFactory;
 
     protected $fillable = [
-        'customer_id',
-        'product_id',
+        'user_id',
+        'kurir_id',
+        'kode_pesanan',
+        'total_harga',
         'status',
-        'total'
+        'pembayaran_status',
+        'pengiriman_status',
     ];
 
-    public function customer() {
-        return $this->belongsTo(Customer::class, 'icustomer_id');
+    // Relasi ke customer (user)
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function product() {
-        return $this->belongsTo(Product::class, 'product_id');
+    // Relasi ke kurir
+    public function kurir()
+    {
+        return $this->belongsTo(Kurir::class, 'kurir_id');
     }
 
-    public function pembayaran() {
+    // Detail pesanan (banyak)
+    public function detailPesanan()
+    {
+        return $this->hasMany(DetailPesanan::class, 'pesanan_id');
+    }
+
+    // Relasi ke pembayaran
+    public function pembayaran()
+    {
         return $this->hasOne(Pembayaran::class, 'pesanan_id');
     }
 
-    public function pengiriman() {
+    // Relasi ke pengiriman
+    public function pengiriman()
+    {
         return $this->hasOne(Pengiriman::class, 'pesanan_id');
-    }
-
-    public function detailPesanan() {
-        return $this->hasMany(DetailPesanan::class, 'pesanan_id');
     }
 }
